@@ -11,38 +11,46 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("boot/async")
 public class UserController {
+
+    Logger logger = Logger.getLogger(UserController.class.toString());
     @Autowired
     private UserService service;
 
     @PostMapping(value = "/users", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = "application/json")
     public ResponseEntity saveUsers(@RequestParam(value = "files") MultipartFile[] files) throws Exception {
+        long start = System.currentTimeMillis();
         for (MultipartFile file : files) {
             service.saveUsers(file);
         }
+        logger.info("Time taken to process the req :"+ (System.currentTimeMillis()-start));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 
     @PostMapping(value = "/users/oldway", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = "application/json")
     public ResponseEntity saveUsersOldWay(@RequestParam(value = "files") MultipartFile[] files) throws Exception {
+        long start = System.currentTimeMillis();
         for (MultipartFile file : files) {
             service.saveUsersOldWay(file);
         }
+        logger.info("Time taken to process the req :"+ (System.currentTimeMillis()-start));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping(value = "/users/oldway/async", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = "application/json")
     public ResponseEntity saveUsersOldWayWithAsyncAnnotation(@RequestParam(value = "files") MultipartFile[] files) throws Exception {
+        long start = System.currentTimeMillis();
         for (MultipartFile file : files) {
             service.saveUsersOldWayWithAsync(file);
         }
+        logger.info("Time taken to process the req :"+ (System.currentTimeMillis()-start));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
 
     @GetMapping(value = "/users", produces = "application/json")
     public CompletableFuture<ResponseEntity> findAllUsers() {

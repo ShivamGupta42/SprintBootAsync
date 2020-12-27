@@ -130,7 +130,7 @@ public class UserService {
                 });
     }
 
-    @Async
+
     private CompletableFuture<List<User>> parseCSVFileOldWayWithAsync(final MultipartFile file) throws Exception {
         logger.info("parse method " + Thread.currentThread().getName());
         final List<User> users = new ArrayList<>();
