@@ -1,15 +1,23 @@
 package com.springboot.async.springBootAsync.controllers;
 
+import com.springboot.async.springBootAsync.Entities.PostMatchReq;
 import com.springboot.async.springBootAsync.Entities.User;
 import com.springboot.async.springBootAsync.service.UserService;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -20,6 +28,17 @@ public class UserController {
     Logger logger = Logger.getLogger(UserController.class.toString());
     @Autowired
     private UserService service;
+
+
+
+    @PostMapping(value = "/testPostMethod", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void testPostMethod( @ModelAttribute PostMatchReq req) throws Exception {
+        System.out.println("receiving values");
+        System.out.println("req body score:"+ req.toString());
+    }
+
+
 
     @PostMapping(value = "/users", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = "application/json")
     public ResponseEntity saveUsers(@RequestParam(value = "files") MultipartFile[] files) throws Exception {
